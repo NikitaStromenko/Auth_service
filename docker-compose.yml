@@ -1,0 +1,29 @@
+version: "1"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=testdb
+    restart: unless-stopped
+  auth_app:
+    image: auth_app:latest
+    container_name: auth_app
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    links:
+      - postgres
+volumes:
+  postgres-data:
